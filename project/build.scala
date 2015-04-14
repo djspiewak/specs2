@@ -29,7 +29,7 @@ object build extends Build {
   lazy val specs2 = Project(
     id = "specs2",
     base = file("."),
-    settings = 
+    settings =
       moduleSettings("")       ++
       compatibilitySettings    ++
       releaseSettings          ++
@@ -37,7 +37,7 @@ object build extends Build {
       Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
    .enablePlugins(GitBranchPrompt)
-  
+
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(
     organization := "org.specs2",
@@ -168,7 +168,7 @@ object build extends Build {
 
   lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
     val name = Project.extract(state).currentRef.project
-    (if (name == "specs2") "" else name) + "> " 
+    (if (name == "specs2") "" else name) + "> "
   }
 
   lazy val compilationSettings: Seq[Settings] = Seq(
@@ -347,22 +347,16 @@ object build extends Build {
   lazy val releaseToSonatype = executeStepTask(sonatypeReleaseAll, "Closing and promoting the Sonatype repo")
 
   lazy val publicationSettings: Seq[Settings] = Seq(
-    publishTo in Global <<= version { v: String =>
+    /* publishTo in Global <<= version { v: String =>
       val nexus = "https://oss.sonatype.org/"
       Some("staging" at nexus + "service/local/staging/deploy/maven2")
-    },
+    },*/
+    licenses += ("MIT" -> url("http://www.opensource.org/licenses/mit-license.php")),
     publishMavenStyle := true,
     publishArtifact in Test := false,
     pomIncludeRepository := { x => false },
     pomExtra := (
       <url>http://specs2.org/</url>
-        <licenses>
-          <license>
-            <name>MIT-style</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
-            <distribution>repo</distribution>
-          </license>
-        </licenses>
         <scm>
           <url>http://github.com/etorreborre/specs2</url>
           <connection>scm:http:http://etorreborre@github.com/etorreborre/specs2.git</connection>
@@ -376,8 +370,8 @@ object build extends Build {
         </developers>
     ),
     credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
-  ) ++
-  sonatypeSettings
+  ) ++ bintray.Plugin.bintraySettings /*++
+  sonatypeSettings*/
 
   /**
    * NOTIFICATION
