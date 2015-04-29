@@ -14,7 +14,7 @@ object depends {
   def scalaz(scalazVersion: String) =
     Seq("org.scalaz"        %% "scalaz-core"      ,
         "org.scalaz"        %% "scalaz-concurrent").map(_ % scalazVersion) ++
-      (if (scalazVersion.startsWith("7.1")) Seq("org.scalaz.stream" %% "scalaz-stream" % "master-a-c2e38611383f6aed50211a3f9f1dec98e9eb4bd6")
+      (if (scalazVersion.startsWith("7.1")) Seq("org.scalaz.stream" %% "scalaz-stream" % "0b8034baed5edf0e71b378174f476da1c95121f8")
        else                                 Seq("org.scalaz.stream" %% "scalaz-stream" % "0.7"))
 
   lazy val scalacheck    = Seq("org.scalacheck" %% "scalacheck"   % "1.12.2")

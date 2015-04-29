@@ -20,17 +20,17 @@ import control.Functions._
 
 /**
  * A Fold[T] can be used to pass over a Process[Task, T].
- * 
+ *
  * It has:
  *
  *  - accumulation, with an initial state, of type S, a fold action and an action to perform with the last state
- *  
+ *
  *  - side-effects with a Sink[Task, (T, S)] to write to a file for example, using the current element in the Process
  *    and the current accumulated state
  *
  * This covers many of the needs of iterating over a Scalaz stream and is composable because there is a Monoid
  * instance for Folds
- * 
+ *
  */
 trait Fold[T] {
   type S
@@ -176,7 +176,7 @@ object Fold {
    */
   def runFoldLast[T](process: Process[Task, T], fold: Fold[T]): Task[fold.S] =
     fold.prepare >>
-    writer.logged(process |> fold.zipWithState1).drainW(fold.sink).map(_._2).runLastOr(fold.init)
+    writer.logged(process |> fold.zipWithState1).observeW(fold.sink).stripW.map(_._2).runLastOr(fold.init)
 
   /**
    * Run a Fold an let it perform a last action with the accumulated state
